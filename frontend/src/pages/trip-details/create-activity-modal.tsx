@@ -1,5 +1,8 @@
 import { Calendar, Tag, X } from 'lucide-react';
+import { FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button } from '../../components/button';
+import { api } from '../../lib/axios';
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void
@@ -8,6 +11,27 @@ interface CreateActivityModalProps {
 export function CreateActivityModal({
   closeCreateActivityModal,
 }: CreateActivityModalProps) {
+  const { tripId } = useParams();
+
+  async function handleCreateActivity(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const activityTitle = formData.get('title')?.toString();
+    const occursAt = formData.get('occurs_at')?.toString();
+
+    try {
+      await api.post(`/trips/${tripId}/activity`, {
+        title: activityTitle,
+        occurs_at: occursAt,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      closeCreateActivityModal();
+    }
+  }
+
   return (
     <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
       <div className="w-[640px] py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
@@ -24,12 +48,13 @@ export function CreateActivityModal({
           </p>
         </div>
 
-        <form className="space-y-3">
+        <form onSubmit={handleCreateActivity} className="space-y-3">
           <div className="space-y-2">
             <div className="bg-zinc-950 border border-zinc-800 px-4 py-[18px] flex items-center gap-2.5 rounded-lg">
               <Tag className="size-5 text-zinc-400" />
               <input
                 type="text"
+                name="title"
                 placeholder="Qual a atividade?"
                 className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
               />
@@ -39,13 +64,14 @@ export function CreateActivityModal({
               <Calendar className="size-5 text-zinc-400" />
               <input
                 type="datetime-local"
+                name="occurs_at"
                 placeholder="Data e horário da atividade"
                 className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
               />
             </div>
           </div>
 
-          <Button variant="primary" size="full">
+          <Button type="submit" variant="primary" size="full">
             Salvar atividade
           </Button>
         </form>

@@ -8,6 +8,14 @@ module.exports = {
     'plugin:import/typescript',
     'airbnb'
   ],
+  settings: {
+    "import/extensions": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ]
+  },
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   plugins: ['react-refresh'],

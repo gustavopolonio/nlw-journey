@@ -9,3 +9,14 @@
 input {
   color-scheme: dark;
 }
+
+
+/* Day picker colors config */
+.rdp-selected .rdp-day_button {
+  border-color: theme("colors.lime.300");
+}
+.rdp-range_start .rdp-day_button,
+.rdp-range_end .rdp-day_button {
+  background-color: theme("colors.lime.950");
+  border-color: theme("colors.lime.950");
+}
