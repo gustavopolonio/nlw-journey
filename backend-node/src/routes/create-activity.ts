@@ -33,11 +33,11 @@ export async function createActivity(app: FastifyInstance) {
         throw new ClientError('Trip not found!')
       }
 
-      if (dayjs(occurs_at).isBefore(dayjs(trip.starts_at))) {
+      if (dayjs(occurs_at).isBefore(dayjs(trip.starts_at), 'day')) {
         throw new ClientError('Invalid activity date.')
       }
 
-      if (dayjs(occurs_at).isAfter(dayjs(trip.ends_at))) {
+      if (dayjs(occurs_at).isAfter(dayjs(trip.ends_at), 'day')) {
         throw new ClientError('Invalid activity date.')
       }
 
