@@ -49,6 +49,7 @@ module.exports = {
       "html": "ignore" | "enforce",
       "custom": "ignore" | "enforce",
       "explicitSpread": "ignore" | "enforce"
-    }]
+    }],
+    "func-names": ["error", "never"]
   },
 }

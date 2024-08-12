@@ -1,6 +1,5 @@
 import { CircleCheck, CircleDashed, UserCog } from 'lucide-react';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 
@@ -11,23 +10,19 @@ interface Participant {
   is_confirmed: boolean
 }
 
+interface TripParams {
+  tripId: string
+}
+
+const guestsLoader: LoaderFunction<TripParams> = async function (
+  { params },
+) {
+  const response = await api.get<{ participants: Participant[] }>(`/trips/${params.tripId}/participants`);
+  return response.data;
+};
+
 export function Guests() {
-  const { tripId } = useParams();
-
-  const [participants, setParticipants] = useState<Participant[]>([]);
-
-  useEffect(() => {
-    async function getPerticipants() {
-      try {
-        const response = await api.get<{ participants: Participant[] }>(`/trips/${tripId}/participants`);
-        setParticipants(response.data.participants);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getPerticipants();
-  }, [tripId]);
+  const { participants } = useLoaderData() as { participants: Participant[] };
 
   return (
     <div className="space-y-6">
@@ -58,3 +53,5 @@ export function Guests() {
     </div>
   );
 }
+
+Guests.loader = guestsLoader;

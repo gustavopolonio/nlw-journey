@@ -1,6 +1,5 @@
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { CreateActivityModal } from './create-activity-modal';
 import { ImportantLinks } from './important-links';
 import { Guests } from './guests';

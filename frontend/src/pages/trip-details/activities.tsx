@@ -1,7 +1,6 @@
 import { CircleCheck } from 'lucide-react';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { format, getDay } from 'date-fns';
+import { LoaderFunction, useLoaderData } from 'react-router-dom';
+import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { api } from '../../lib/axios';
 
@@ -17,23 +16,19 @@ interface ActivitiesByDate {
   activities: Activity[]
 }
 
+interface TripParams {
+  tripId: string
+}
+
+const activitiesLoader: LoaderFunction<TripParams> = async function (
+  { params },
+) {
+  const response = await api.get<{ activities: ActivitiesByDate[] }>(`/trips/${params.tripId}/activity`);
+  return response.data;
+};
+
 export function Activities() {
-  const { tripId } = useParams();
-
-  const [activities, setActivities] = useState<ActivitiesByDate[]>([]);
-
-  useEffect(() => {
-    async function getActivities() {
-      try {
-        const response = await api.get<{ activities: ActivitiesByDate[] }>(`/trips/${tripId}/activity`);
-        setActivities(response.data.activities);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getActivities();
-  }, [tripId]);
+  const { activities } = useLoaderData() as { activities: ActivitiesByDate[] };
 
   return (
     <div className="space-y-8">
@@ -72,3 +67,5 @@ export function Activities() {
     </div>
   );
 }
+
+Activities.loader = activitiesLoader;

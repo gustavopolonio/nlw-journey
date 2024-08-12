@@ -1,6 +1,5 @@
 import { MapPin, Calendar, Settings2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLoaderData, LoaderFunction } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
@@ -13,23 +12,19 @@ interface Trip {
   ends_at: string
 }
 
+interface TripParams {
+  tripId: string
+}
+
+const destinationAndDateHeaderLoader: LoaderFunction<TripParams> = async function (
+  { params },
+) {
+  const response = await api.get(`/trips/${params.tripId}`);
+  return response.data;
+};
+
 export function DestinationAndDateHeader() {
-  const { tripId } = useParams();
-
-  const [trip, setTrip] = useState<Trip | undefined>();
-
-  useEffect(() => {
-    async function getTrip() {
-      try {
-        const response = await api.get<{trip: Trip}>(`/trips/${tripId}`);
-        setTrip(response.data.trip);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-    getTrip();
-  }, [tripId]);
+  const { trip } = useLoaderData() as { trip: Trip };
 
   const displayedDate = trip
     ? format(trip?.starts_at, "d 'de' LLL").concat(' até ').concat(format(trip?.ends_at, "d 'de' LLL"))
@@ -60,3 +55,5 @@ export function DestinationAndDateHeader() {
     </div>
   );
 }
+
+DestinationAndDateHeader.loader = destinationAndDateHeaderLoader;
