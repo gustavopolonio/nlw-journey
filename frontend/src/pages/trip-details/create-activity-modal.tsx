@@ -3,6 +3,8 @@ import { FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
+import { useAppDispatch } from '../../app/hooks';
+import { getActivitiesThunk } from '../../features/acitivities/activitiesSlice';
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void
@@ -12,6 +14,7 @@ export function CreateActivityModal({
   closeCreateActivityModal,
 }: CreateActivityModalProps) {
   const { tripId } = useParams();
+  const dispatch = useAppDispatch();
 
   async function handleCreateActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -20,11 +23,15 @@ export function CreateActivityModal({
     const activityTitle = formData.get('title')?.toString();
     const occursAt = formData.get('occurs_at')?.toString();
 
+    // if (!activityTitle || !occursAt) return;
+
     try {
       await api.post(`/trips/${tripId}/activity`, {
         title: activityTitle,
         occurs_at: occursAt,
       });
+
+      if (tripId) await dispatch(getActivitiesThunk({ tripId }));
     } catch (error) {
       console.log(error);
     } finally {

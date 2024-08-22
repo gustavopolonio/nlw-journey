@@ -50,6 +50,7 @@ module.exports = {
       "custom": "ignore" | "enforce",
       "explicitSpread": "ignore" | "enforce"
     }],
-    "func-names": ["error", "never"]
+    "func-names": ["error", "never"],
+    "no-use-before-define": "off",
   },
 }

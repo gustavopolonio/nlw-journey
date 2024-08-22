@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Provider as ReduxProvider } from 'react-redux';
 import { CreateTripPage } from './pages/create-trip';
 import { TripDetailsPage } from './pages/trip-details';
 import { ErrorPage } from './pages/error';
 import { DestinationAndDateHeader } from './pages/trip-details/destination-and-date-header';
-import { Activities } from './pages/trip-details/activities';
-import { Guests } from './pages/trip-details/guests';
+import { store } from './app/store';
 
 const router = createBrowserRouter([
   {
@@ -24,13 +24,9 @@ const router = createBrowserRouter([
       };
 
       const trip = await DestinationAndDateHeader.loader(loaderArgs);
-      const activities = await Activities.loader(loaderArgs);
-      const participants = await Guests.loader(loaderArgs);
 
       return {
         ...trip,
-        ...activities,
-        ...participants,
       };
     },
     errorElement: <ErrorPage />,
@@ -39,6 +35,8 @@ const router = createBrowserRouter([
 
 export function App() {
   return (
-    <RouterProvider router={router} />
+    <ReduxProvider store={store}>
+      <RouterProvider router={router} />
+    </ReduxProvider>
   );
 }

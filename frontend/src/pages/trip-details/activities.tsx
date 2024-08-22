@@ -1,38 +1,26 @@
 import { CircleCheck } from 'lucide-react';
-import { LoaderFunction, useLoaderData } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { api } from '../../lib/axios';
-
-interface Activity {
-  id: string
-  title: string
-  occurs_at: string
-  trip_id: string
-}
-
-interface ActivitiesByDate {
-  date: string
-  activities: Activity[]
-}
-
-interface TripParams {
-  tripId: string
-}
-
-const activitiesLoader: LoaderFunction<TripParams> = async function (
-  { params },
-) {
-  const response = await api.get<{ activities: ActivitiesByDate[] }>(`/trips/${params.tripId}/activity`);
-  return response.data;
-};
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getActivitiesThunk, selectAllActivities } from '../../features/acitivities/activitiesSlice';
 
 export function Activities() {
-  const { activities } = useLoaderData() as { activities: ActivitiesByDate[] };
+  const { tripId } = useParams();
+  const dispatch = useAppDispatch();
+  const activities = useAppSelector(selectAllActivities);
+
+  useEffect(() => {
+    async function getActivities() {
+      if (tripId) await dispatch(getActivitiesThunk({ tripId }));
+    }
+    getActivities();
+  }, [dispatch, tripId]);
 
   return (
     <div className="space-y-8">
-      {activities.map((activityByDate) => (
+      {activities.length > 0 ? activities.map((activityByDate) => (
         <div key={activityByDate.date} className="space-y-3">
           <div className="flex items-baseline gap-2">
             <span className="text-zinc-300 text-xl font-semibold">
@@ -46,8 +34,8 @@ export function Activities() {
               })}
             </span>
           </div>
-          {activityByDate.activities.length > 0 ? (
-            activityByDate.activities.map((activity) => (
+          {activityByDate.items.length > 0 ? (
+            activityByDate.items.map((activity) => (
               <div
                 key={activity.id}
                 className="flex items-center justify-between py-2.5 px-4 bg-zinc-900 rounded-xl shadow-shape"
@@ -63,9 +51,9 @@ export function Activities() {
             <p className="text-zinc-500 text-sm">Nenhuma atividade cadastrada nessa data.</p>
           )}
         </div>
-      ))}
+      )) : (
+        <p>Nenhum atividade cadastrada.</p>
+      )}
     </div>
   );
 }
-
-Activities.loader = activitiesLoader;
