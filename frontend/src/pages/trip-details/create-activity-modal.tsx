@@ -8,6 +8,7 @@ import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 import { useAppDispatch } from '../../app/hooks';
 import { getActivitiesThunk } from '../../features/acitivities/activitiesSlice';
+import { Modal } from '../../components/modal';
 
 interface Trip {
   destination: string
@@ -18,11 +19,13 @@ interface Trip {
 }
 
 interface CreateActivityModalProps {
-  closeCreateActivityModal: () => void
+  isOpen: boolean
+  closeModal: () => void
 }
 
 export function CreateActivityModal({
-  closeCreateActivityModal,
+  isOpen,
+  closeModal,
 }: CreateActivityModalProps) {
   const { trip } = useLoaderData() as { trip: Trip };
   const { tripId } = useParams();
@@ -80,6 +83,11 @@ export function CreateActivityModal({
     return formErrors;
   }
 
+  function resetCreateActivityFormFields() {
+    setActivityTitle('');
+    setActivityOccursAt('');
+  }
+
   async function handleCreateActivity(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setHasAttemptedSubmitForm(true);
@@ -97,7 +105,8 @@ export function CreateActivityModal({
       } catch (error) {
         console.log(error);
       } finally {
-        closeCreateActivityModal();
+        closeModal();
+        resetCreateActivityFormFields();
       }
     }
   }
@@ -113,14 +122,17 @@ export function CreateActivityModal({
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
-      <div className="w-[640px] py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
+    <Modal
+      isOpen={isOpen}
+      closeModal={closeModal}
+      width={640}
+      classNames={{ content: '!bg-zinc-900' }}
+      closeIcon={<X className="size-5 text-zinc-400" />}
+    >
+      <div className="space-y-5">
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Cadastrar atividade</h2>
-            <button type="button" onClick={closeCreateActivityModal}>
-              <X className="size-5 text-zinc-400" />
-            </button>
+            <h2 className="text-lg font-semibold text-white">Cadastrar atividade</h2>
           </div>
 
           <p className="text-sm text-zinc-400">
@@ -136,7 +148,7 @@ export function CreateActivityModal({
                 type="text"
                 name="title"
                 placeholder="Qual a atividade?"
-                className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                className="flex-1 h-5 bg-transparent text-lg text-zinc-100 placeholder-zinc-400 outline-none"
                 value={activityTitle}
                 onChange={checkTitleInputValid}
               />
@@ -150,12 +162,21 @@ export function CreateActivityModal({
             <div className="bg-zinc-950 border border-zinc-800 px-4 py-[18px] flex items-center gap-2.5 rounded-lg">
               <Calendar className="size-5 text-zinc-400" />
               <input
-                type="datetime-local"
+                type={activityOccursAt ? 'datetime-local' : 'text'}
                 name="occurs_at"
                 placeholder="Data e horário da atividade"
-                className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                className="flex-1 h-5 bg-transparent text-lg text-zinc-100 placeholder-zinc-400 outline-none cursor-pointer"
                 value={activityOccursAt}
                 onChange={checkOccursAtInputValid}
+                onFocus={(e) => {
+                  e.target.type = 'datetime-local';
+                  e.target.showPicker();
+                }}
+                onBlur={(e) => {
+                  if (!e.target.value) {
+                    e.target.type = 'text';
+                  }
+                }}
               />
             </div>
 
@@ -165,11 +186,11 @@ export function CreateActivityModal({
             </span>
           </div>
 
-          <Button type="submit" variant="primary" size="full">
+          <Button type="submit" variant="primary" size="full" className="text-base">
             Salvar atividade
           </Button>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }

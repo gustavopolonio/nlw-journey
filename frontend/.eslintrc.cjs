@@ -52,5 +52,6 @@ module.exports = {
     }],
     "func-names": ["error", "never"],
     "no-use-before-define": "off",
+    "react/require-default-props": "off"
   },
 }
