@@ -31,7 +31,17 @@ export function Guests() {
         {participants?.map((participant, index) => (
           <div key={participant.id} className="flex items-center justify-between gap-4">
             <div className="space-y-1.5">
-              <span className="font-medium text-zinc-100">{participant.name ?? `Convidado ${index}`}</span>
+              <span className="font-medium text-zinc-100">
+                {participant.name ? (
+                  <>
+                    {participant.name}
+                    {' '}
+                    -
+                    {' '}
+                    <span className="text-lime-300">Organizador</span>
+                  </>
+                ) : `Convidado ${index}`}
+              </span>
               <span className="text-sm text-zinc-400 block truncate">
                 {participant.email}
               </span>
