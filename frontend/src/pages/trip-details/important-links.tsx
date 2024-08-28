@@ -1,8 +1,9 @@
 import { Link2, Plus } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
+import { CreateLinkModal } from './create-link-modal';
 
 interface Link {
   id: string
@@ -14,20 +15,30 @@ interface Link {
 export function ImportantLinks() {
   const { tripId } = useParams();
   const [importantLinks, setImportantLinks] = useState<Link[]>([]);
+  const [isCreateLinkModalOpen, setIsCreateLinkModalOpen] = useState(false);
+
+  function openCreateLinkModal() {
+    setIsCreateLinkModalOpen(true);
+  }
+
+  function closeCreateLinkModal() {
+    setIsCreateLinkModalOpen(false);
+  }
+
+  const getLinks = useCallback(async () => {
+    const response = await api.get<{ links: Link[] }>(`/trips/${tripId}/link`);
+    setImportantLinks(response.data.links);
+  }, [tripId]);
 
   useEffect(() => {
-    async function getLinks() {
-      const response = await api.get<{ links: Link[] }>(`/trips/${tripId}/link`);
-      setImportantLinks(response.data.links);
-    }
     getLinks();
-  }, [tripId]);
+  }, [getLinks]);
 
   return (
     <div className="space-y-6">
       <h2 className="font-semibold text-xl">Links importantes</h2>
 
-      <div className="space-y-5">
+      <div className="space-y-5 max-h-52 overflow-y-auto">
         {importantLinks.length > 0 ? (
           importantLinks.map((link) => (
             <div key={link.id} className="flex items-center justify-between gap-14">
@@ -50,10 +61,16 @@ export function ImportantLinks() {
         )}
       </div>
 
-      <Button variant="secondary" size="full">
+      <Button variant="secondary" size="full" onClick={openCreateLinkModal}>
         <Plus className="size-5" />
         Cadastrar novo link
       </Button>
+
+      <CreateLinkModal
+        isOpen={isCreateLinkModalOpen}
+        closeModal={closeCreateLinkModal}
+        getLinks={getLinks}
+      />
     </div>
   );
 }

@@ -86,6 +86,7 @@ export function CreateActivityModal({
   function resetCreateActivityFormFields() {
     setActivityTitle('');
     setActivityOccursAt('');
+    setHasAttemptedSubmitForm(false);
   }
 
   async function handleCreateActivity(event: FormEvent<HTMLFormElement>) {
@@ -125,9 +126,6 @@ export function CreateActivityModal({
     <Modal
       isOpen={isOpen}
       closeModal={closeModal}
-      width={640}
-      classNames={{ content: '!bg-zinc-900' }}
-      closeIcon={<X className="size-5 text-zinc-400" />}
     >
       <div className="space-y-5">
         <div className="space-y-2">

@@ -20,3 +20,14 @@ input {
   background-color: theme("colors.lime.950");
   border-color: theme("colors.lime.950");
 }
+
+* :not(body)::-webkit-scrollbar {
+  width: 26px;
+}
+
+* :not(body)::-webkit-scrollbar-thumb {
+  border: 11px solid theme("colors.zinc.950");
+  background-clip: padding-box;
+  border-radius: 9999px;
+  background-color: #AAAAAA;
+}

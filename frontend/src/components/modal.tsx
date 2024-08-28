@@ -1,28 +1,29 @@
 import { Modal as AntdModal } from 'antd';
+import { X } from 'lucide-react';
 import { ReactNode } from 'react';
 
 interface ModalProps {
   isOpen: boolean
   closeModal: () => void
-  width: number
-  classNames: {
+  width?: number
+  classNames?: {
     header?: string;
     body?: string;
     footer?: string;
     content?: string;
   }
   footer?: ReactNode
-  closeIcon: ReactNode
+  closeIcon?: ReactNode
   children: ReactNode
 }
 
 export function Modal({
   isOpen,
   closeModal,
-  width,
-  classNames,
+  width = 640,
+  classNames = { content: '!bg-zinc-900' },
   footer = null,
-  closeIcon,
+  closeIcon = <X className="size-5 text-zinc-400" />,
   children,
 }: ModalProps) {
   function handleOk() {
