@@ -14,6 +14,10 @@ interface ModalProps {
   }
   footer?: ReactNode
   closeIcon?: ReactNode
+  afterCloseModal?: () => void
+  maskClosable?: boolean
+  closable?: boolean
+  keyboard?: boolean
   children: ReactNode
 }
 
@@ -21,9 +25,13 @@ export function Modal({
   isOpen,
   closeModal,
   width = 640,
-  classNames = { content: '!bg-zinc-900' },
+  classNames = { content: '!bg-zinc-900 text-zinc-50' },
   footer = null,
   closeIcon = <X className="size-5 text-zinc-400" />,
+  afterCloseModal,
+  maskClosable,
+  closable,
+  keyboard,
   children,
 }: ModalProps) {
   function handleOk() {
@@ -43,6 +51,10 @@ export function Modal({
       classNames={classNames}
       footer={footer}
       closeIcon={closeIcon}
+      maskClosable={maskClosable}
+      closable={closable}
+      keyboard={keyboard}
+      afterClose={afterCloseModal}
     >
       {children}
     </AntdModal>

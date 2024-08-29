@@ -139,7 +139,7 @@ export function CreateActivityModal({
         </div>
 
         <form onSubmit={handleCreateActivity} className="space-y-3">
-          <div className="">
+          <div>
             <div className="bg-zinc-950 border border-zinc-800 px-4 py-[18px] flex items-center gap-2.5 rounded-lg">
               <Tag className="size-5 text-zinc-400" />
               <input

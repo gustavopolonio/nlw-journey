@@ -1,8 +1,10 @@
 import { MapPin, Calendar, Settings2 } from 'lucide-react';
 import { useLoaderData, LoaderFunction } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useState } from 'react';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
+import { UpdateTripModal } from './update-trip-modal';
 
 interface Trip {
   destination: string
@@ -25,10 +27,19 @@ const destinationAndDateHeaderLoader: LoaderFunction<TripParams> = async functio
 
 export function DestinationAndDateHeader() {
   const { trip } = useLoaderData() as { trip: Trip };
+  const [isUpdateTripModalOpen, setIsUpdateTripModalOpen] = useState(false);
 
   const displayedDate = trip
     ? format(trip?.starts_at, "d 'de' LLL").concat(' até ').concat(format(trip?.ends_at, "d 'de' LLL"))
     : null;
+
+  function openUpdateTripModal() {
+    setIsUpdateTripModalOpen(true);
+  }
+
+  function closeUpdateTripModal() {
+    setIsUpdateTripModalOpen(false);
+  }
 
   return (
     <div className="flex items-center justify-between bg-zinc-900 px-4 h-16 rounded-xl shadow-shape">
@@ -47,11 +58,17 @@ export function DestinationAndDateHeader() {
 
         <div className="w-px bg-zinc-800 h-6" />
 
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={openUpdateTripModal}>
           Alterar local/data
           <Settings2 className="size-5" />
         </Button>
       </div>
+
+      <UpdateTripModal
+        isOpen={isUpdateTripModalOpen}
+        closeModal={closeUpdateTripModal}
+        trip={trip}
+      />
     </div>
   );
 }
