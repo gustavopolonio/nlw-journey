@@ -34,7 +34,7 @@ export async function updateTrip(app: FastifyInstance) {
         throw new ClientError('Trip not found!')
       }
 
-      if (dayjs(starts_at).isBefore(dayjs())) {
+      if (dayjs(starts_at).isBefore(dayjs(new Date(0, 0, 0, 0)))) {
         throw new ClientError('Invalid trip start date.')
       }
 
@@ -42,7 +42,7 @@ export async function updateTrip(app: FastifyInstance) {
         throw new ClientError('Invalid trip end date.')
       }
 
-      const tripUdated = await prisma.trip.update({
+      await prisma.trip.update({
         where: {
           id: tripId
         },
