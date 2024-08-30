@@ -34,7 +34,7 @@ export async function updateTrip(app: FastifyInstance) {
         throw new ClientError('Trip not found!')
       }
 
-      if (dayjs(starts_at).isBefore(dayjs(new Date(0, 0, 0, 0)))) {
+      if (dayjs(starts_at).isBefore(dayjs(new Date().setHours(0, 0, 0, 0)))) {
         throw new ClientError('Invalid trip start date.')
       }
 
