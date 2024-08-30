@@ -27,11 +27,17 @@ interface UpdateTripModalProps {
 const updateTripFormSchema = z.object({
   destination: z.string().trim().min(3, { message: 'Mínimo 3 caracteres' }),
   startsAt: z.coerce.date({
-    message: 'Data inválida',
+    errorMap: ({ code }, { defaultError }) => ({
+      message: code === 'invalid_date' ? 'Selecione uma data' : defaultError,
+    }),
   }).refine((date) => !isBefore(date, new Date().setHours(0, 0, 0, 0)), {
     message: 'A data inicial da viagem não pode ser anterior ao dia de hoje',
   }),
-  endsAt: z.coerce.date({ message: 'Data inválida' }),
+  endsAt: z.coerce.date({
+    errorMap: ({ code }, { defaultError }) => ({
+      message: code === 'invalid_date' ? 'Selecione uma data' : defaultError,
+    }),
+  }),
 });
 
 type UpdateTripFormSchema = z.infer<typeof updateTripFormSchema>

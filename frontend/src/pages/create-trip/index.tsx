@@ -104,6 +104,7 @@ export function CreateTripPage() {
             isGuestInputVisible={isGuestInputVisible}
             showGuestInput={showGuestInput}
             hideGuestInput={hideGuestInput}
+            tripDestination={destination}
             setDestination={setDestination}
             eventStartAndEndDate={eventStartAndEndDate}
             setEventStartAndEndDate={setEventStartAndEndDate}
