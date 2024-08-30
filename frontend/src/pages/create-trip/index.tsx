@@ -46,16 +46,8 @@ export function CreateTripPage() {
     setIsConfirmTripModalOpen(false);
   }
 
-  function handleAddEmailToInvite(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get('email')?.toString();
-    if (!email) return;
-
-    if (emailsToInvite.includes(email)) return;
-
+  function handleAddEmailToInvite(email: string) {
     setEmailsToInvite([...emailsToInvite, email]);
-    e.currentTarget.reset();
   }
 
   function removeEmailFromInvites(emailToRemove: string) {
@@ -67,7 +59,6 @@ export function CreateTripPage() {
     if (!destination) return;
     if (!eventStartAndEndDate || !eventStartAndEndDate.from || !eventStartAndEndDate.to) return;
     if (!ownerName || !ownerEmail) return;
-    if (emailsToInvite.length === 0) return;
 
     try {
       setIsCreatingTrip(true);
@@ -85,7 +76,6 @@ export function CreateTripPage() {
       navigate(`/trips/${tripId}`);
     } catch (error) {
       console.log(error);
-      setIsCreatingTrip(false);
     } finally {
       setIsCreatingTrip(false);
     }
@@ -137,7 +127,7 @@ export function CreateTripPage() {
         <InviteGuestsModal
           closeGuestModal={closeGuestModal}
           emailsToInvite={emailsToInvite}
-          handleAddEmailToInvite={handleAddEmailToInvite}
+          addEmailToInvite={handleAddEmailToInvite}
           removeEmailFromInvites={removeEmailFromInvites}
         />
       )}
