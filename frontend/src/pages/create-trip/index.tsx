@@ -147,6 +147,8 @@ export function CreateTripPage() {
           createTrip={createTrip}
           setOwnerName={setOwnerName}
           setOwnerEmail={setOwnerEmail}
+          destination={destination}
+          startAndEndDate={eventStartAndEndDate}
           isCreatingTrip={isCreatingTrip}
         />
       )}
