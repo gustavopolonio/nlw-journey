@@ -54,8 +54,7 @@ export function CreateTripPage() {
     setEmailsToInvite(emailsToInvite.filter((email) => email !== emailToRemove));
   }
 
-  async function createTrip(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function createTrip() {
     if (!destination) return;
     if (!eventStartAndEndDate || !eventStartAndEndDate.from || !eventStartAndEndDate.to) return;
     if (!ownerName || !ownerEmail) return;
@@ -136,6 +135,8 @@ export function CreateTripPage() {
         <ConfirmTripModal
           closeConfirmTripModal={closeConfirmTripModal}
           createTrip={createTrip}
+          tripOwnerName={ownerName}
+          tripOwnerEmail={ownerEmail}
           setOwnerName={setOwnerName}
           setOwnerEmail={setOwnerEmail}
           destination={destination}
