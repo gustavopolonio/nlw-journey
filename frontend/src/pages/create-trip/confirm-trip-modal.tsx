@@ -1,12 +1,14 @@
-import { Mail, User, X } from 'lucide-react';
+import { Mail, User } from 'lucide-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { z } from 'zod';
 import { Button } from '../../components/button';
+import { Modal } from '../../components/modal';
 
 interface ConfirmTripModalProps {
+  isOpen: boolean
   closeConfirmTripModal: () => void
   createTrip: () => void
   tripOwnerName: string
@@ -32,6 +34,7 @@ type ValidateConfirmTripCreationFormSchema = {
 }
 
 export function ConfirmTripModal({
+  isOpen,
   closeConfirmTripModal,
   createTrip,
   tripOwnerName,
@@ -93,22 +96,21 @@ export function ConfirmTripModal({
     validateConfirmTripCreationFormSchema({ ownerEmail: e.target.value });
   }
 
-  function handleCloseConfirmTripModal() {
-    closeConfirmTripModal();
+  function resetConfirmTripCreationForm() {
+    setHasAttemptedSubmitForm(false);
     setOwnerName('');
     setOwnerEmail('');
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
-      <div className="w-[640px] py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
+    <Modal
+      isOpen={isOpen}
+      closeModal={closeConfirmTripModal}
+      afterCloseModal={resetConfirmTripCreationForm}
+    >
+      <div className="space-y-5">
         <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Confirmar criação da viagem</h2>
-            <button type="button" onClick={handleCloseConfirmTripModal}>
-              <X className="size-5 text-zinc-400" />
-            </button>
-          </div>
+          <h2 className="text-lg font-semibold">Confirmar criação da viagem</h2>
 
           <p className="text-sm text-zinc-400">
             Para concluir a criação da viagem para
@@ -131,6 +133,7 @@ export function ConfirmTripModal({
                 type="text"
                 placeholder="Seu nome completo"
                 className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                value={tripOwnerName}
                 onChange={checkOwnerNameInputValid}
               />
             </div>
@@ -148,6 +151,7 @@ export function ConfirmTripModal({
                 type="email"
                 placeholder="Seu e-mail pessoal"
                 className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                value={tripOwnerEmail}
                 onChange={checkOwnerEmailInputValid}
               />
             </div>
@@ -165,6 +169,6 @@ export function ConfirmTripModal({
           </Button>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }

@@ -131,19 +131,18 @@ export function CreateTripPage() {
         />
       )}
 
-      {isConfirmTripModalOpen && (
-        <ConfirmTripModal
-          closeConfirmTripModal={closeConfirmTripModal}
-          createTrip={createTrip}
-          tripOwnerName={ownerName}
-          tripOwnerEmail={ownerEmail}
-          setOwnerName={setOwnerName}
-          setOwnerEmail={setOwnerEmail}
-          destination={destination}
-          startAndEndDate={eventStartAndEndDate}
-          isCreatingTrip={isCreatingTrip}
-        />
-      )}
+      <ConfirmTripModal
+        isOpen={isConfirmTripModalOpen}
+        closeConfirmTripModal={closeConfirmTripModal}
+        createTrip={createTrip}
+        tripOwnerName={ownerName}
+        tripOwnerEmail={ownerEmail}
+        setOwnerName={setOwnerName}
+        setOwnerEmail={setOwnerEmail}
+        destination={destination}
+        startAndEndDate={eventStartAndEndDate}
+        isCreatingTrip={isCreatingTrip}
+      />
     </div>
   );
 }

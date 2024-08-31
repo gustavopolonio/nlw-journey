@@ -25,7 +25,7 @@ export function Modal({
   isOpen,
   closeModal,
   width = 640,
-  classNames = { content: '!bg-zinc-900 text-zinc-50' },
+  classNames,
   footer = null,
   closeIcon = <X className="size-5 text-zinc-400" />,
   afterCloseModal,
@@ -42,13 +42,18 @@ export function Modal({
     closeModal();
   }
 
+  const classes = {
+    ...classNames,
+    content: '!bg-zinc-900 text-zinc-50',
+  };
+
   return (
     <AntdModal
       open={isOpen}
       onOk={handleOk}
       onCancel={handleCancel}
       width={width}
-      classNames={classNames}
+      classNames={classes}
       footer={footer}
       closeIcon={closeIcon}
       maskClosable={maskClosable}
