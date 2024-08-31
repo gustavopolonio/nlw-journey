@@ -122,14 +122,13 @@ export function CreateTripPage() {
         </p>
       </div>
 
-      {isGuestModalOpen && (
-        <InviteGuestsModal
-          closeGuestModal={closeGuestModal}
-          emailsToInvite={emailsToInvite}
-          addEmailToInvite={handleAddEmailToInvite}
-          removeEmailFromInvites={removeEmailFromInvites}
-        />
-      )}
+      <InviteGuestsModal
+        isOpen={isGuestModalOpen}
+        closeGuestModal={closeGuestModal}
+        emailsToInvite={emailsToInvite}
+        addEmailToInvite={handleAddEmailToInvite}
+        removeEmailFromInvites={removeEmailFromInvites}
+      />
 
       <ConfirmTripModal
         isOpen={isConfirmTripModalOpen}

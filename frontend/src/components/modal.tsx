@@ -60,6 +60,7 @@ export function Modal({
       closable={closable}
       keyboard={keyboard}
       afterClose={afterCloseModal}
+      centered
     >
       {children}
     </AntdModal>

@@ -2,8 +2,10 @@ import { AtSign, Plus, X } from 'lucide-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { z } from 'zod';
 import { Button } from '../../components/button';
+import { Modal } from '../../components/modal';
 
 interface InviteGuestsModalProps {
+  isOpen: boolean
   closeGuestModal: () => void
   emailsToInvite: string[]
   removeEmailFromInvites: (emailToRemove: string) => void
@@ -11,6 +13,7 @@ interface InviteGuestsModalProps {
 }
 
 export function InviteGuestsModal({
+  isOpen,
   closeGuestModal,
   emailsToInvite,
   addEmailToInvite,
@@ -68,16 +71,16 @@ export function InviteGuestsModal({
     validateInviteGuestFormSchema({ email: e.target.value });
   }
 
+  function resetInviteGuestForm() {
+    setHasAttemptedSubmitForm(false);
+    setGuestEmail('');
+  }
+
   return (
-    <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
-      <div className="w-[640px] py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
+    <Modal isOpen={isOpen} closeModal={closeGuestModal} afterCloseModal={resetInviteGuestForm}>
+      <div className="space-y-5">
         <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <h2 className="text-lg font-semibold">Selecionar convidados</h2>
-            <button type="button" onClick={closeGuestModal}>
-              <X className="size-5 text-zinc-400" />
-            </button>
-          </div>
+          <h2 className="text-lg font-semibold">Selecionar convidados</h2>
 
           <p className="text-sm text-zinc-400">
             Os convidados irão receber e-mails para confirmar a participação na viagem.
@@ -127,6 +130,6 @@ export function InviteGuestsModal({
           </span>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 }
