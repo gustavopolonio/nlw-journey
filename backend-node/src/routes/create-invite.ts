@@ -17,17 +17,24 @@ export async function createInvite(app: FastifyInstance) {
           tripId: z.string().uuid()
         }),
         body: z.object({
-          email: z.string().email()
+          emails_to_invite: z.array(z.string().email())
         })
       }
     },
     async (request) => {
       const { tripId } = request.params
-      const { email } = request.body
+      const { emails_to_invite } = request.body
 
       const trip = await prisma.trip.findUnique({
         where: {
           id: tripId
+        },
+        include: {
+          participants: {
+            select: {
+              email: true
+            }
+          }
         }
       })
 
@@ -35,11 +42,24 @@ export async function createInvite(app: FastifyInstance) {
         throw new ClientError('Trip not found!')
       }
 
-      const participant = await prisma.participant.create({
-        data: {
+      // Remove possible duplicate emails of emails_to_invite
+      const emailsToInvite = [...new Set(emails_to_invite)]
+
+      // Remove participants already invited
+      const participantsAlreadyInvited = trip.participants.map(participant => participant.email)
+      const emailsToInviteParsed = emailsToInvite.filter(email => {
+        return !participantsAlreadyInvited.includes(email)
+      })
+
+      if (emailsToInviteParsed.length === 0) {
+        throw new ClientError('There is no new participant to invite')
+      }
+
+      const participants = await prisma.participant.createManyAndReturn({
+        data: emailsToInviteParsed.map(email => ({
           email,
           trip_id: tripId
-        }
+        }))
       })
 
       const formattedStartDate = dayjs(trip.starts_at).format('LL')
@@ -47,31 +67,34 @@ export async function createInvite(app: FastifyInstance) {
 
       const mail = await getMailClient()
 
-      const confirmationLink = `${env.API_BASE_URL}/participants/${participant.id}/confirm`
+      await Promise.all(
+        participants.map(async (participant) => {
+          const confirmationLink = `${env.API_BASE_URL}/participants/${participant.id}/confirm`
+    
+          const info = await mail.sendMail({
+            from: 'Equipe plann.er <oi@plann.er>',
+            to: participant.email,
+            subject: `Confirme sua presença na viagem para ${trip.destination} em ${formattedStartDate}`,
+            html: `
+              <div style="font-family: sans-serif; font-size: 16px; line-height: 1.6;">
+                <p>Você foi convidado(a) para participar de uma viagem para <strong>${trip.destination}</strong> nas datas de <strong>${formattedStartDate}</strong> até <strong>${formattedEndDate}</strong>.</p>
+                <p></p>
+                <p>Para confirmar sua presença na viagem, clique no link abaixo:</p>
+                <p></p>
+                <p>
+                  <a href=${confirmationLink}>Confirmar viagem</a>
+                </p>
+                <p></p>
+                <p>Caso você não saiba do que se trata esse e-mail, apenas ignore.</p>
+              </div>
+            `.trim()
+          })
+    
+          console.log(nodemailer.getTestMessageUrl(info))
+        })
+      )
 
-      const info = await mail.sendMail({
-        from: 'Equipe plann.er <oi@plann.er>',
-        to: participant.email,
-        subject: `Confirme sua presença na viagem para ${trip.destination} em ${formattedStartDate}`,
-        html: `
-          <div style="font-family: sans-serif; font-size: 16px; line-height: 1.6;">
-            <p>Você foi convidado(a) para participar de uma viagem para <strong>${trip.destination}</strong> nas datas de <strong>${formattedStartDate}</strong> até <strong>${formattedEndDate}</strong>.</p>
-            <p></p>
-            <p>Para confirmar sua presença na viagem, clique no link abaixo:</p>
-            <p></p>
-            <p>
-              <a href=${confirmationLink}>Confirmar viagem</a>
-            </p>
-            <p></p>
-            <p>Caso você não saiba do que se trata esse e-mail, apenas ignore.</p>
-          </div>
-        `.trim()
-      })
-
-      console.log(nodemailer.getTestMessageUrl(info))
-      
-
-      return { participantId: participant.id }
+      return { participantsId: Array.from(participants, (participant) => participant.id) }
     }
   )
 }
