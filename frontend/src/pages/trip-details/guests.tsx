@@ -1,8 +1,9 @@
 import { CircleCheck, CircleDashed, UserCog } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
+import { ManageGuestsModal } from './manage-guests-modal';
 
 interface Participant {
   id: string
@@ -14,20 +15,30 @@ interface Participant {
 export function Guests() {
   const { tripId } = useParams();
   const [participants, setpPrticipants] = useState<Participant[]>([]);
+  const [isManageGuestsModalOpen, setIsManageGuestsModalOpen] = useState(false);
+
+  function handleOpenManageGuestsModal() {
+    setIsManageGuestsModalOpen(true);
+  }
+
+  function handleCloseManageGuestsModal() {
+    setIsManageGuestsModalOpen(false);
+  }
+
+  const getParticipants = useCallback(async () => {
+    const response = await api.get<{ participants: Participant[] }>(`/trips/${tripId}/participants`);
+    setpPrticipants(response.data.participants);
+  }, [tripId]);
 
   useEffect(() => {
-    async function getParticipants() {
-      const response = await api.get<{ participants: Participant[] }>(`/trips/${tripId}/participants`);
-      setpPrticipants(response.data.participants);
-    }
     getParticipants();
-  }, [tripId]);
+  }, [getParticipants]);
 
   return (
     <div className="space-y-6">
       <h2 className="font-semibold text-xl">Convidados</h2>
 
-      <div className="space-y-5">
+      <div className="space-y-5  max-h-52 overflow-y-auto">
         {participants?.map((participant, index) => (
           <div key={participant.id} className="flex items-center justify-between gap-4">
             <div className="space-y-1.5">
@@ -55,10 +66,16 @@ export function Guests() {
         ))}
       </div>
 
-      <Button variant="secondary" size="full">
+      <Button variant="secondary" size="full" onClick={handleOpenManageGuestsModal}>
         <UserCog className="size-5" />
         Gerenciar convidados
       </Button>
+
+      <ManageGuestsModal
+        isOpen={isManageGuestsModalOpen}
+        closeModal={handleCloseManageGuestsModal}
+        getParticipants={getParticipants}
+      />
     </div>
   );
 }

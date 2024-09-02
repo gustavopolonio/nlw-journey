@@ -1,5 +1,6 @@
 import { ReactNode, ComponentProps } from 'react';
 import { tv, VariantProps } from 'tailwind-variants';
+import { Spinner } from './spinner';
 
 const buttonVariants = tv({
   base: 'font-medium rounded-lg px-5 flex items-center justify-center gap-2',
@@ -7,6 +8,7 @@ const buttonVariants = tv({
     variant: {
       primary: 'bg-lime-300 text-zinc-950 enabled:hover:bg-lime-400',
       secondary: 'bg-zinc-800 text-zinc-200 enabled:hover:bg-zinc-700',
+      danger: 'bg-red-500 text-zinc-100 enabled:hover:bg-red-600',
     },
     size: {
       default: 'py-2',
@@ -20,10 +22,12 @@ const buttonVariants = tv({
 });
 
 interface ButtonProps extends ComponentProps<'button'>, VariantProps<typeof buttonVariants> {
+  loading?: boolean
   children: ReactNode
 }
 
 export function Button({
+  loading = false,
   children,
   variant,
   size,
@@ -38,7 +42,11 @@ export function Button({
       {...props}
       className={buttonVariants({ variant, size, class: `${isDisabled} ${classNames}` })}
     >
-      {children}
+      {loading ? (
+        <Spinner />
+      ) : (
+        children
+      )}
     </button>
   );
 }

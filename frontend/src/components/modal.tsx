@@ -1,8 +1,10 @@
-import { Modal as AntdModal } from 'antd';
+import { Modal as AntdModal, ModalProps as AntdModalProps } from 'antd';
 import { X } from 'lucide-react';
 import { ReactNode } from 'react';
 
-interface ModalProps {
+type ModalFooter = Pick<AntdModalProps, 'footer'>
+
+interface ModalProps extends ModalFooter {
   isOpen: boolean
   closeModal: () => void
   width?: number
@@ -12,7 +14,6 @@ interface ModalProps {
     footer?: string;
     content?: string;
   }
-  footer?: ReactNode
   closeIcon?: ReactNode
   afterCloseModal?: () => void
   maskClosable?: boolean
@@ -42,9 +43,9 @@ export function Modal({
     closeModal();
   }
 
-  const classes = {
+  const modalClasses = {
     ...classNames,
-    content: '!bg-zinc-900 text-zinc-50',
+    content: `${classNames?.content} !bg-zinc-900 text-zinc-50`,
   };
 
   return (
@@ -53,7 +54,7 @@ export function Modal({
       onOk={handleOk}
       onCancel={handleCancel}
       width={width}
-      classNames={classes}
+      classNames={modalClasses}
       footer={footer}
       closeIcon={closeIcon}
       maskClosable={maskClosable}

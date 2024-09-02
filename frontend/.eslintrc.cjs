@@ -52,6 +52,12 @@ module.exports = {
     }],
     "func-names": ["error", "never"],
     "no-use-before-define": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "react/no-unstable-nested-components": [
+      "off" | "warn" | "error",
+      {
+        "allowAsProps": true,
+      }
+    ]
   },
 }
