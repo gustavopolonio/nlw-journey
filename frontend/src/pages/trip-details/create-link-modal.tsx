@@ -57,7 +57,7 @@ export function CreateLinkModal({
           url: linkUrl,
         });
 
-        getLinks();
+        await getLinks();
       } catch (error) {
         console.log(error);
       } finally {

@@ -102,7 +102,7 @@ export function Guests() {
                   onConfirm={() => handleRemoveParticipant(participant)}
                 >
                   <Button variant="outline" className="p-0">
-                    <Trash className="size-5 text-zinc-100" />
+                    <Trash className="size-5 text-zinc-400" />
                   </Button>
                 </Popconfirm>
               )}

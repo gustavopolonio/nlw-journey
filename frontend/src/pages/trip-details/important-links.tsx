@@ -1,6 +1,7 @@
-import { Link2, Plus } from 'lucide-react';
+import { Plus, Trash } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Popconfirm } from 'antd';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 import { CreateLinkModal } from './create-link-modal';
@@ -25,6 +26,15 @@ export function ImportantLinks() {
     setIsCreateLinkModalOpen(false);
   }
 
+  async function handleRemoveLink(link: Link) {
+    try {
+      await api.delete(`/links/${link.id}`);
+      await getLinks();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const getLinks = useCallback(async () => {
     const response = await api.get<{ links: Link[] }>(`/trips/${tripId}/link`);
     setImportantLinks(response.data.links);
@@ -43,7 +53,9 @@ export function ImportantLinks() {
           importantLinks.map((link) => (
             <div key={link.id} className="flex items-center justify-between gap-14">
               <div className="space-y-1.5">
-                <span className="font-medium text-zinc-100">{link.title}</span>
+                <span className="font-medium text-zinc-100 block truncate">
+                  {link.title}
+                </span>
                 <a
                   href={link.url}
                   target="_blank"
@@ -53,7 +65,27 @@ export function ImportantLinks() {
                   {link.url}
                 </a>
               </div>
-              <Link2 className="size-5 text-zinc-400 shrink-0" />
+
+              <Popconfirm
+                title="Remover link"
+                description={(
+                  <div>
+                    Tem certeza que deseja remover o link
+                    {' '}
+                    <span className="font-medium">
+                      {link.title}
+                    </span>
+                    ?
+                  </div>
+                )}
+                okText="Sim"
+                cancelText="Cancelar"
+                onConfirm={() => handleRemoveLink(link)}
+              >
+                <Button variant="outline" className="p-0 shrink-0">
+                  <Trash className="size-5 text-zinc-400" />
+                </Button>
+              </Popconfirm>
             </div>
           ))
         ) : (
