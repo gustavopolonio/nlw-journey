@@ -9,6 +9,7 @@ const buttonVariants = tv({
       primary: 'bg-lime-300 text-zinc-950 enabled:hover:bg-lime-400',
       secondary: 'bg-zinc-800 text-zinc-200 enabled:hover:bg-zinc-700',
       danger: 'bg-red-500 text-zinc-100 enabled:hover:bg-red-600',
+      outline: 'bg-transparent text-zinc-200',
     },
     size: {
       default: 'py-2',

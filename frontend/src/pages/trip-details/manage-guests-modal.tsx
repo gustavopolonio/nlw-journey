@@ -108,7 +108,7 @@ export function ManageGuestsModal({
         });
         closeModal();
         setEmailsToInvite([]);
-        getParticipants();
+        await getParticipants();
       } catch (error) {
         console.log(error);
         if (error instanceof AxiosError && error.response?.data.message === 'There is no new participant to invite') {
