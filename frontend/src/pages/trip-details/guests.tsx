@@ -96,7 +96,7 @@ export function Guests() {
                       </span>
                       ?
                     </div>
-                )}
+                  )}
                   okText="Sim"
                   cancelText="Cancelar"
                   onConfirm={() => handleRemoveParticipant(participant)}

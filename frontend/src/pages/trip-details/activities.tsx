@@ -1,22 +1,35 @@
-import { CircleCheck } from 'lucide-react';
+import { CircleCheck, Trash } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
+import { Popconfirm } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getActivitiesThunk, selectAllActivities } from '../../features/acitivities/activitiesSlice';
+import { Activity, getActivitiesThunk, selectAllActivities } from '../../features/acitivities/activitiesSlice';
+import { Button } from '../../components/button';
+import { api } from '../../lib/axios';
 
 export function Activities() {
   const { tripId } = useParams();
   const dispatch = useAppDispatch();
   const activities = useAppSelector(selectAllActivities);
 
-  useEffect(() => {
-    async function getActivities() {
-      if (tripId) await dispatch(getActivitiesThunk({ tripId }));
+  async function handleRemoveActivity(activity: Activity) {
+    try {
+      await api.delete(`/activities/${activity.id}`);
+      await getActivities();
+    } catch (error) {
+      console.log(error);
     }
-    getActivities();
+  }
+
+  const getActivities = useCallback(async () => {
+    if (tripId) await dispatch(getActivitiesThunk({ tripId }));
   }, [dispatch, tripId]);
+
+  useEffect(() => {
+    getActivities();
+  }, [getActivities]);
 
   return (
     <div className="space-y-8">
@@ -44,7 +57,29 @@ export function Activities() {
                   <CircleCheck className="size-5 text-lime-300" />
                   <span className="text-zinc-100">{activity.title}</span>
                 </div>
-                <span className="text-zinc-400 text-sm">{format(activity.occurs_at, "HH:mm'h'")}</span>
+                <span className="flex items-center gap-3 text-zinc-400 text-sm">
+                  {format(activity.occurs_at, "HH:mm'h'")}
+                  <Popconfirm
+                    title="Remover atividade"
+                    description={(
+                      <div>
+                        Tem certeza que deseja remover a atividade
+                        {' '}
+                        <span className="font-medium">
+                          {activity.title}
+                        </span>
+                        ?
+                      </div>
+                    )}
+                    okText="Sim"
+                    cancelText="Cancelar"
+                    onConfirm={() => handleRemoveActivity(activity)}
+                  >
+                    <Button variant="outline" className="p-0">
+                      <Trash className="size-5 text-zinc-400" />
+                    </Button>
+                  </Popconfirm>
+                </span>
               </div>
             ))
           ) : (

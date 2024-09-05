@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../lib/axios';
 import { AppDispatch, RootState } from '../../app/store';
 
-interface Activity {
+export interface Activity {
   id: string
   title: string
   occurs_at: string
