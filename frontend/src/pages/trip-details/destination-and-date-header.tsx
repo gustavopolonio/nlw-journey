@@ -42,23 +42,30 @@ export function DestinationAndDateHeader() {
   }
 
   return (
-    <div className="flex items-center justify-between bg-zinc-900 px-4 h-16 rounded-xl shadow-shape">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col justify-between gap-3 bg-zinc-900 p-4 rounded-xl shadow-shape sm:flex-row sm:items-center sm:h-16 sm:py-0">
+      <div className="h-11 flex items-center gap-2">
         <MapPin className="size-5 text-zinc-400" />
         <span className="text-zinc-100">{trip?.destination}</span>
       </div>
 
-      <div className="flex items-center gap-5">
-        <div className="flex items-center gap-2">
+      <div className="h-px w-full bg-zinc-800 sm:hidden" />
+
+      <div className="w-full flex flex-col items-start gap-3 sm:items-center sm:gap-5 sm:flex-row sm:w-fit">
+        <div className="h-11 flex items-center gap-2">
           <Calendar className="size-5 text-zinc-400" />
           <span className="text-zinc-100">
             { displayedDate }
           </span>
         </div>
 
-        <div className="w-px bg-zinc-800 h-6" />
+        <div className="hidden w-px bg-zinc-800 h-6 sm:block" />
 
-        <Button variant="secondary" onClick={openUpdateTripModal}>
+        <Button
+          variant="secondary"
+          size="full"
+          onClick={openUpdateTripModal}
+          className="sm:w-fit"
+        >
           Alterar local/data
           <Settings2 className="size-5" />
         </Button>

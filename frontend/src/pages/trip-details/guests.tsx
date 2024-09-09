@@ -52,7 +52,7 @@ export function Guests() {
 
   return (
     <div className="space-y-6">
-      <h2 className="font-semibold text-xl">Convidados</h2>
+      <h2 className="text-center font-semibold text-xl md:text-left">Convidados</h2>
 
       <div className="space-y-5  max-h-52 overflow-y-auto">
         {participants?.map((participant, index) => (

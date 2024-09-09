@@ -5,6 +5,7 @@ import { ImportantLinks } from './important-links';
 import { Guests } from './guests';
 import { Activities } from './activities';
 import { DestinationAndDateHeader } from './destination-and-date-header';
+import { Button } from '../../components/button';
 
 export function TripDetailsPage() {
   const [isCreateActivityModalOpen, setIsCreateActivityModalOpen] = useState(false);
@@ -18,30 +19,26 @@ export function TripDetailsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+    <div className="max-w-6xl mx-auto px-6 pt-5 pb-10 space-y-8 sm:py-10">
       <DestinationAndDateHeader />
 
-      <main className="px-6 flex gap-16">
+      <main className="flex flex-col gap-16 xmd:flex-row xmd:px-6">
         <div className="flex-1 space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 items-center justify-between sm:flex-row xmd:flex-col lg:flex-row">
             <h2 className="text-3xl font-semibold">Atividades</h2>
-            <button
-              type="button"
-              onClick={openCreateActivityModal}
-              className="flex items-center gap-2 py-2 px-5 rounded-lg font-medium bg-lime-300 text-zinc-950 hover:bg-lime-400"
-            >
+            <Button size="full" className="sm:w-fit xmd:w-full lg:w-fit" onClick={openCreateActivityModal}>
               <Plus className="size-5" />
               Cadastrar atividade
-            </button>
+            </Button>
           </div>
 
           <Activities />
         </div>
 
-        <div className="w-80 space-y-6">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 xmd:w-80 xmd:flex xmd:flex-col xmd:gap-0 xmd:space-y-6">
           <ImportantLinks />
 
-          <div className="h-px bg-zinc-800" />
+          <div className="hidden h-px bg-zinc-800 xmd:block" />
 
           <Guests />
         </div>

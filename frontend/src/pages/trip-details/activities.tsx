@@ -51,13 +51,13 @@ export function Activities() {
             activityByDate.items.map((activity) => (
               <div
                 key={activity.id}
-                className="flex items-center justify-between py-2.5 px-4 bg-zinc-900 rounded-xl shadow-shape"
+                className="flex items-center justify-between gap-2 pl-4 pr-1 bg-zinc-900 rounded-xl shadow-shape"
               >
                 <div className="flex items-center gap-3">
-                  <CircleCheck className="size-5 text-lime-300" />
-                  <span className="text-zinc-100">{activity.title}</span>
+                  <CircleCheck className="size-5 text-lime-300 shrink-0" />
+                  <span className="text-zinc-100 block truncate">{activity.title}</span>
                 </div>
-                <span className="flex items-center gap-3 text-zinc-400 text-sm">
+                <span className="flex items-center text-zinc-400 text-sm shrink-0">
                   {format(activity.occurs_at, "HH:mm'h'")}
                   <Popconfirm
                     title="Remover atividade"
@@ -75,7 +75,7 @@ export function Activities() {
                     cancelText="Cancelar"
                     onConfirm={() => handleRemoveActivity(activity)}
                   >
-                    <Button variant="outline" className="p-0">
+                    <Button variant="outline" className="p-3">
                       <Trash className="size-5 text-zinc-400" />
                     </Button>
                   </Popconfirm>

@@ -28,7 +28,7 @@ export function Modal({
   width = 640,
   classNames,
   footer = null,
-  closeIcon = <X className="size-5 text-zinc-400" />,
+  closeIcon = <X className="size-6 text-zinc-400" />,
   afterCloseModal,
   maskClosable,
   closable,

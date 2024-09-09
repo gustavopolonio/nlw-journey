@@ -46,7 +46,7 @@ export function ImportantLinks() {
 
   return (
     <div className="space-y-6">
-      <h2 className="font-semibold text-xl">Links importantes</h2>
+      <h2 className="text-center font-semibold text-xl md:text-left">Links importantes</h2>
 
       <div className="space-y-5 max-h-52 overflow-y-auto">
         {importantLinks.length > 0 ? (

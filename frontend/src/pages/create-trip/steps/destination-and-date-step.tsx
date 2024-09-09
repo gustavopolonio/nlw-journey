@@ -133,21 +133,23 @@ export function DestinationAndDateStep({
 
   return (
     <div>
-      <div className="h-16 bg-zinc-900 rounded-xl px-4 flex items-center shadow-shape gap-5">
-        <div className="flex items-center gap-2 flex-1">
+      <div className="bg-zinc-900 rounded-xl p-4 flex flex-col items-start shadow-shape gap-3 sm:flex-row sm:items-center sm:py-3 sm:gap-5">
+        <div className="w-full flex items-center gap-2 flex-1">
           <MapPin className="size-5 text-zinc-400" />
           <input
             disabled={isGuestInputVisible}
             type="text"
             placeholder="Para onde você vai?"
-            className="w-full bg-transparent text-lg placeholder-zinc-400 outline-none"
+            className="w-full h-11 bg-transparent text-lg placeholder-zinc-400 outline-none"
             onChange={checkDestinationInputValid}
           />
         </div>
 
+        <div className="h-px w-full bg-zinc-800 sm:hidden" />
+
         <button
           type="button"
-          className="flex items-center gap-2 text-lg text-zinc-400"
+          className="h-11 flex items-center gap-2 text-lg text-zinc-400"
           disabled={isGuestInputVisible}
           onClick={openDatePicker}
         >
@@ -158,56 +160,66 @@ export function DestinationAndDateStep({
         </button>
 
         {isDatePickerOpen && (
-        <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
-          <div className="py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">Selecione a data</h2>
-                <button type="button" onClick={() => closeDatePicker(false)}>
-                  <X className="size-5 text-zinc-400" />
-                </button>
+          <div className="fixed inset-0 bg-black/60 flex justify-center items-center">
+            <div className="py-5 px-6 bg-zinc-900 rounded-xl shadow-shape space-y-5">
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-lg font-semibold">Selecione a data</h2>
+                  <button type="button" onClick={() => closeDatePicker(false)}>
+                    <X className="size-5 text-zinc-400" />
+                  </button>
+                </div>
               </div>
+
+              <DayPicker
+                mode="range"
+                selected={startAndEndDate}
+                onSelect={setStartAndEndDate}
+                classNames={{
+                  range_start: `${defaultClassNames.range_start} bg-gradient-to-r from-transparent from-50% to-lime-300 to-50%`,
+                  range_end: `${defaultClassNames.range_end} bg-gradient-to-l from-transparent from-50% to-lime-300 to-50%`,
+                  range_middle: `${defaultClassNames.range_middle} bg-lime-300 text-lime-950`,
+                  chevron: 'fill-lime-300',
+                  today: 'text-lime-300',
+                  day_button: `${defaultClassNames.day_button} disabled:cursor-not-allowed`,
+                }}
+                defaultMonth={eventStartAndEndDate?.from}
+                disabled={{ before: new Date() }}
+              />
+
+              <Button
+                variant="primary"
+                className="ml-auto"
+                onClick={handleSelectEventStartAndEndDate}
+                disabled={!startAndEndDate
+                  || !startAndEndDate.from
+                  || !startAndEndDate.to}
+              >
+                Ok
+              </Button>
             </div>
-
-            <DayPicker
-              mode="range"
-              selected={startAndEndDate}
-              onSelect={setStartAndEndDate}
-              classNames={{
-                range_start: `${defaultClassNames.range_start} bg-gradient-to-r from-transparent from-50% to-lime-300 to-50%`,
-                range_end: `${defaultClassNames.range_end} bg-gradient-to-l from-transparent from-50% to-lime-300 to-50%`,
-                range_middle: `${defaultClassNames.range_middle} bg-lime-300 text-lime-950`,
-                chevron: 'fill-lime-300',
-                today: 'text-lime-300',
-                day_button: `${defaultClassNames.day_button} disabled:cursor-not-allowed`,
-              }}
-              defaultMonth={eventStartAndEndDate?.from}
-              disabled={{ before: new Date() }}
-            />
-
-            <Button
-              variant="primary"
-              className="ml-auto"
-              onClick={handleSelectEventStartAndEndDate}
-              disabled={!startAndEndDate
-                || !startAndEndDate.from
-                || !startAndEndDate.to}
-            >
-              Ok
-            </Button>
           </div>
-        </div>
         )}
 
-        <div className="w-px bg-zinc-800 h-6" />
+        <div className="hidden w-px bg-zinc-800 h-6 sm:block" />
 
         {isGuestInputVisible ? (
-          <Button onClick={hideGuestInput} variant="secondary">
+          <Button
+            onClick={hideGuestInput}
+            variant="secondary"
+            size="full"
+            className="sm:w-fit"
+          >
             Alterar local/data
             <Settings2 className="size-5" />
           </Button>
         ) : (
-          <Button onClick={handleGoToInviteGuestsStep} variant="primary">
+          <Button
+            onClick={handleGoToInviteGuestsStep}
+            variant="primary"
+            size="full"
+            className="sm:w-fit"
+          >
             Continuar
             <ArrowRight className="size-5 text-lime-950" />
           </Button>
@@ -215,7 +227,7 @@ export function DestinationAndDateStep({
       </div>
 
       {!isGuestInputVisible && (
-        <span className="flex h-5 mt-1 text-sm text-red-500">
+        <span className="block mt-1 text-sm text-red-500 sm:flex sm:h-5">
           {
             (destinationAndDateFormErrors?.destination && hasAttemptedSubmitForm)
               && destinationAndDateFormErrors.destination[0]

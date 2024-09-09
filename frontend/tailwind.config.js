@@ -16,6 +16,9 @@ export default {
       backgroundImage: {
         pattern: 'url(/bg.png)',
       },
+      screens: {
+        xmd: '880px',
+      },
     },
   },
   plugins: [],

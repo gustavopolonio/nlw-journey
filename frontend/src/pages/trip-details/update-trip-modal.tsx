@@ -263,7 +263,7 @@ export function UpdateTripModal({
               )}
             </div>
 
-            <span className="block h-5 mb-2 mt-1 text-sm text-red-500">
+            <span className="block h-7 mb-2 mt-1 text-sm text-red-500">
               {
               ((updateTripFormErrors?.startsAt || updateTripFormErrors?.endsAt)
                 && hasAttemptedSubmitForm

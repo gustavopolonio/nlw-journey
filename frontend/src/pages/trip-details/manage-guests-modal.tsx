@@ -191,13 +191,13 @@ export function ManageGuestsModal({
 
         <form onSubmit={handleAddEmailToInvite}>
           <div className="flex items-center bg-zinc-950 border border-zinc-800 p-2 gap-2.5 rounded-lg">
-            <div className="flex items-center gap-2 flex-1 pl-2">
+            <div className="flex items-center gap-1.5 flex-1 sm:pl-2 sm:gap-2">
               <AtSign className="size-5 text-zinc-400" />
               <input
                 type="email"
                 name="email"
-                placeholder="Digite o e-mail do convidado?"
-                className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                placeholder="E-mail do convidado"
+                className="flex-1 text-base bg-transparent placeholder-zinc-400 outline-none sm:text-lg"
                 disabled={isInvitingGuests}
                 value={guestEmail}
                 onChange={checkEmailInputValid}

@@ -127,12 +127,12 @@ export function ConfirmTripModal({
 
         <form onSubmit={handleCreateTrip} className="space-y-3">
           <div className="space-y-2">
-            <div className="bg-zinc-950 border border-zinc-800 px-4 py-[18px] flex items-center gap-2.5 rounded-lg">
+            <div className="bg-zinc-950 border border-zinc-800 px-4 py-1.5 flex items-center gap-2.5 rounded-lg">
               <User className="size-5 text-zinc-400" />
               <input
                 type="text"
                 placeholder="Seu nome completo"
-                className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                className="h-11 flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
                 value={tripOwnerName}
                 onChange={checkOwnerNameInputValid}
               />
@@ -145,12 +145,12 @@ export function ConfirmTripModal({
               }
             </span>
 
-            <div className="bg-zinc-950 border border-zinc-800 px-4 py-[18px] flex items-center gap-2.5 rounded-lg">
+            <div className="bg-zinc-950 border border-zinc-800 px-4 py-1.5 flex items-center gap-2.5 rounded-lg">
               <Mail className="size-5 text-zinc-400" />
               <input
                 type="email"
                 placeholder="Seu e-mail pessoal"
-                className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
+                className="h-11 flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
                 value={tripOwnerEmail}
                 onChange={checkOwnerEmailInputValid}
               />
