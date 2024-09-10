@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DateRange } from 'react-day-picker';
 import { InviteGuestsModal } from './invite-guests-modal';

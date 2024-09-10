@@ -1,6 +1,9 @@
 module.exports = {
   root: true,
-  env: { browser: true, es2020: true },
+  env: { 
+    browser: true,
+    es2020: true
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -9,55 +12,35 @@ module.exports = {
     'airbnb'
   ],
   settings: {
-    "import/extensions": [
-      ".js",
-      ".jsx",
-      ".ts",
-      ".tsx"
-    ]
+    "import/resolver": {
+      typescript: true
+    }
   },
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    'import/prefer-default-export': [
-      'off'
-    ],
+    'import/prefer-default-export': 'off',
     'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'unix'],
     'react/react-in-jsx-scope': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
       {
+        'ts': 'never',
         'tsx': 'never'
       }
     ],
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
-    "react/jsx-no-bind": ["off"],
-    "@typescript-eslint/no-unused-vars": [
-      2,
-      {
-        "args": "after-used"
-      }
-    ],
-    "jsx-a11y/control-has-associated-label": "off",
-    "react/jsx-props-no-spreading": ["off", {
-      "html": "ignore" | "enforce",
-      "custom": "ignore" | "enforce",
-      "explicitSpread": "ignore" | "enforce"
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    'react/jsx-no-bind': ['error', {
+      allowArrowFunctions: true,
+      allowFunctions: true,
     }],
-    "func-names": ["error", "never"],
-    "no-use-before-define": "off",
-    "react/require-default-props": "off",
-    "react/no-unstable-nested-components": [
-      "off" | "warn" | "error",
-      {
-        "allowAsProps": true,
-      }
-    ]
-  },
+    "@typescript-eslint/no-unused-vars": "error",
+    "react/jsx-props-no-spreading": ["error", {
+      "html": "ignore",
+    }],
+    "react/require-default-props": ["error", {
+      "forbidDefaultForRequired": true,
+      "functions": "defaultArguments"
+    }]
+  }
 }

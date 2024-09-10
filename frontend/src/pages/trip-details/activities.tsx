@@ -14,6 +14,10 @@ export function Activities() {
   const dispatch = useAppDispatch();
   const activities = useAppSelector(selectAllActivities);
 
+  const getActivities = useCallback(async () => {
+    if (tripId) await dispatch(getActivitiesThunk({ tripId }));
+  }, [dispatch, tripId]);
+
   async function handleRemoveActivity(activity: Activity) {
     try {
       await api.delete(`/activities/${activity.id}`);
@@ -22,10 +26,6 @@ export function Activities() {
       console.log(error);
     }
   }
-
-  const getActivities = useCallback(async () => {
-    if (tripId) await dispatch(getActivitiesThunk({ tripId }));
-  }, [dispatch, tripId]);
 
   useEffect(() => {
     getActivities();

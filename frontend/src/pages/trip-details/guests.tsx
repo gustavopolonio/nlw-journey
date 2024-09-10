@@ -32,6 +32,11 @@ export function Guests() {
     setIsManageGuestsModalOpen(false);
   }
 
+  const getParticipants = useCallback(async () => {
+    const response = await api.get<{ participants: Participant[] }>(`/trips/${tripId}/participants`);
+    setpPrticipants(response.data.participants);
+  }, [tripId]);
+
   async function handleRemoveParticipant(participant: Participant) {
     try {
       await api.delete(`/participants/${participant.id}`);
@@ -40,11 +45,6 @@ export function Guests() {
       console.log(error);
     }
   }
-
-  const getParticipants = useCallback(async () => {
-    const response = await api.get<{ participants: Participant[] }>(`/trips/${tripId}/participants`);
-    setpPrticipants(response.data.participants);
-  }, [tripId]);
 
   useEffect(() => {
     getParticipants();

@@ -8,7 +8,7 @@ import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 
 interface ManageGuestsModalProps {
-  isOpen: boolean,
+  isOpen: boolean
   closeModal: () => void
   getParticipants: () => Promise<void>
 }
@@ -18,23 +18,7 @@ export function ManageGuestsModal({
   closeModal,
   getParticipants,
 }: ManageGuestsModalProps) {
-  const { tripId } = useParams();
   const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
-  const [guestEmail, setGuestEmail] = useState('');
-  const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
-  const [inviteGuestsError, setInviteGuestsError] = useState({
-    show: false,
-    text: '',
-  });
-  const [isInvitingGuests, setIsInvitingGuests] = useState(false);
-  const [inviteGuestFormErrors, setInviteGuestFormErrors] = useState<
-    InviteGuestFormErrors| undefined
-  >(undefined);
-  const [isUpdateTripModalClosable, setIsUpdateTripModalClosable] = useState({
-    maskClosable: true,
-    closable: true,
-    keyboard: true,
-  });
 
   const inviteGuestFormSchema = z.object({
     email: z.string().email({
@@ -52,8 +36,38 @@ export function ManageGuestsModal({
     [key in keyof InviteGuestFormSchema]?: string
   }
 
+  const { tripId } = useParams();
+  const [guestEmail, setGuestEmail] = useState('');
+  const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
+  const [inviteGuestsError, setInviteGuestsError] = useState({
+    show: false,
+    text: '',
+  });
+  const [isInvitingGuests, setIsInvitingGuests] = useState(false);
+  const [inviteGuestFormErrors, setInviteGuestFormErrors] = useState<
+    InviteGuestFormErrors| undefined
+  >(undefined);
+  const [isUpdateTripModalClosable, setIsUpdateTripModalClosable] = useState({
+    maskClosable: true,
+    closable: true,
+    keyboard: true,
+  });
+
   function removeEmailFromInvites(emailToRemove: string) {
     setEmailsToInvite(emailsToInvite.filter((email) => email !== emailToRemove));
+  }
+
+  function validateInviteGuestFormSchema({
+    email,
+  }: ValidateInviteGuestFormSchema) {
+    const inviteGuestFormSchemaParsed = inviteGuestFormSchema.safeParse({
+      email: email ?? guestEmail,
+    });
+
+    const formErrors = inviteGuestFormSchemaParsed.error?.formErrors.fieldErrors;
+
+    setInviteGuestFormErrors(formErrors);
+    return formErrors;
   }
 
   function handleAddEmailToInvite(e: FormEvent<HTMLFormElement>) {
@@ -68,19 +82,6 @@ export function ManageGuestsModal({
       setHasAttemptedSubmitForm(false);
       setInviteGuestsError({ ...inviteGuestsError, show: false });
     }
-  }
-
-  function validateInviteGuestFormSchema({
-    email,
-  }: ValidateInviteGuestFormSchema) {
-    const inviteGuestFormSchemaParsed = inviteGuestFormSchema.safeParse({
-      email: email ?? guestEmail,
-    });
-
-    const formErrors = inviteGuestFormSchemaParsed.error?.formErrors.fieldErrors;
-
-    setInviteGuestFormErrors(formErrors);
-    return formErrors;
   }
 
   function checkEmailInputValid(e: ChangeEvent<HTMLInputElement>) {
@@ -179,6 +180,7 @@ export function ManageGuestsModal({
                   type="button"
                   onClick={() => removeEmailFromInvites(email)}
                   disabled={isInvitingGuests}
+                  aria-label="Close"
                 >
                   <X className="size-4 text-zinc-400" />
                 </button>

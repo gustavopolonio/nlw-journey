@@ -41,18 +41,6 @@ export function InviteGuestsModal({
   >(undefined);
   const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
 
-  function handleAddEmailToInvite(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setHasAttemptedSubmitForm(true);
-
-    const formErrors = !!validateInviteGuestFormSchema({});
-
-    if (!formErrors) {
-      addEmailToInvite(guestEmail);
-      setGuestEmail('');
-    }
-  }
-
   function validateInviteGuestFormSchema({
     email,
   }: ValidateInviteGuestFormSchema) {
@@ -64,6 +52,18 @@ export function InviteGuestsModal({
 
     setInviteGuestFormErrors(formErrors);
     return formErrors;
+  }
+
+  function handleAddEmailToInvite(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setHasAttemptedSubmitForm(true);
+
+    const formErrors = !!validateInviteGuestFormSchema({});
+
+    if (!formErrors) {
+      addEmailToInvite(guestEmail);
+      setGuestEmail('');
+    }
   }
 
   function checkEmailInputValid(e: ChangeEvent<HTMLInputElement>) {

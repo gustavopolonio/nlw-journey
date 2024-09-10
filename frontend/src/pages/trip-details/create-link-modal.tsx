@@ -44,6 +44,21 @@ export function CreateLinkModal({
     setHasAttemptedSubmitForm(false);
   }
 
+  function validateCreateLinkFormSchema({
+    title,
+    url,
+  }: ValidateCreateLinkFormSchema) {
+    const createLinkFormSchemaParsed = createLinkFormSchema.safeParse({
+      title: title ?? linkTitle,
+      url: url ?? linkUrl,
+    });
+
+    const formErrors = createLinkFormSchemaParsed.error?.formErrors.fieldErrors;
+
+    setCreateLinkFormErrors(formErrors);
+    return formErrors;
+  }
+
   async function handleCreateLink(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setHasAttemptedSubmitForm(true);
@@ -65,21 +80,6 @@ export function CreateLinkModal({
         resetCreateLinkFormFields();
       }
     }
-  }
-
-  function validateCreateLinkFormSchema({
-    title,
-    url,
-  }: ValidateCreateLinkFormSchema) {
-    const createLinkFormSchemaParsed = createLinkFormSchema.safeParse({
-      title: title ?? linkTitle,
-      url: url ?? linkUrl,
-    });
-
-    const formErrors = createLinkFormSchemaParsed.error?.formErrors.fieldErrors;
-
-    setCreateLinkFormErrors(formErrors);
-    return formErrors;
   }
 
   function checkTitleInputValid(e: ChangeEvent<HTMLInputElement>) {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { api } from '../../lib/axios';
-import { AppDispatch, RootState } from '../../app/store';
+import type { AppDispatch, RootState } from '../../app/store';
 
 export interface Activity {
   id: string
@@ -27,6 +27,8 @@ const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: RootState,
   dispatch: AppDispatch
 }>();
+
+const selectActivitiesStatus = (state: RootState) => state.activities.status;
 
 export const getActivitiesThunk = createAppAsyncThunk(
   'activities/getActivitiesThunk',
@@ -57,12 +59,14 @@ export const activitiesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getActivitiesThunk.pending, (state) => {
-        state.status = 'pending';
-      })
-      .addCase(getActivitiesThunk.rejected, (state) => {
-        state.status = 'rejected';
-      })
+      .addCase(getActivitiesThunk.pending, (state) => ({
+        ...state,
+        status: 'pending',
+      }))
+      .addCase(getActivitiesThunk.rejected, (state) => ({
+        ...state,
+        status: 'rejected',
+      }))
       .addCase(getActivitiesThunk.fulfilled, (_, action) => ({
         activities: action.payload,
         status: 'completed',
@@ -73,4 +77,4 @@ export const activitiesSlice = createSlice({
 export const activitiesReducer = activitiesSlice.reducer;
 
 export const selectAllActivities = (state: RootState) => state.activities.activities;
-export const selectActivitiesStatus = (state: RootState) => state.activities.status;
+export { selectActivitiesStatus };

@@ -26,6 +26,11 @@ export function ImportantLinks() {
     setIsCreateLinkModalOpen(false);
   }
 
+  const getLinks = useCallback(async () => {
+    const response = await api.get<{ links: Link[] }>(`/trips/${tripId}/link`);
+    setImportantLinks(response.data.links);
+  }, [tripId]);
+
   async function handleRemoveLink(link: Link) {
     try {
       await api.delete(`/links/${link.id}`);
@@ -34,11 +39,6 @@ export function ImportantLinks() {
       console.log(error);
     }
   }
-
-  const getLinks = useCallback(async () => {
-    const response = await api.get<{ links: Link[] }>(`/trips/${tripId}/link`);
-    setImportantLinks(response.data.links);
-  }, [tripId]);
 
   useEffect(() => {
     getLinks();

@@ -26,13 +26,13 @@ export function Modal({
   isOpen,
   closeModal,
   width = 640,
-  classNames,
+  classNames = {},
   footer = null,
   closeIcon = <X className="size-6 text-zinc-400" />,
-  afterCloseModal,
-  maskClosable,
-  closable,
-  keyboard,
+  afterCloseModal = undefined,
+  maskClosable = undefined,
+  closable = undefined,
+  keyboard = undefined,
   children,
 }: ModalProps) {
   function handleOk() {

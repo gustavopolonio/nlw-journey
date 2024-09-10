@@ -1,4 +1,4 @@
-import { Calendar, Tag, X } from 'lucide-react';
+import { Calendar, Tag } from 'lucide-react';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useLoaderData, useParams } from 'react-router-dom';
 import { z } from 'zod';

@@ -75,6 +75,27 @@ export function DestinationAndDateStep({
     setIsDatePickerOpen(false);
   }
 
+  function validateDestinationAndDateFormSchema({
+    destination,
+    startsAt,
+    endsAt,
+  }: ValidateDestinationAndDateFormSchema) {
+    const destinationAndDateFormSchemaParsed = destinationAndDateFormSchema.safeParse({
+      destination: destination ?? tripDestination,
+      startsAt: startsAt ?? eventStartAndEndDate?.from,
+      endsAt: endsAt ?? eventStartAndEndDate?.to,
+    });
+
+    const formErrors = destinationAndDateFormSchemaParsed.error?.formErrors.fieldErrors;
+
+    setDestinationAndDateFormErrors(formErrors);
+    return formErrors;
+  }
+
+  function checkStartsAndEndsAtInputsValid(startsAt: string, endsAt: string) {
+    validateDestinationAndDateFormSchema({ startsAt, endsAt });
+  }
+
   function handleSelectEventStartAndEndDate() {
     if (
       startAndEndDate
@@ -96,30 +117,9 @@ export function DestinationAndDateStep({
     ? format(eventStartAndEndDate.from, "d 'de' LLL").concat(' até ').concat(format(eventStartAndEndDate.to, "d 'de' LLL"))
     : null;
 
-  function validateDestinationAndDateFormSchema({
-    destination,
-    startsAt,
-    endsAt,
-  }: ValidateDestinationAndDateFormSchema) {
-    const destinationAndDateFormSchemaParsed = destinationAndDateFormSchema.safeParse({
-      destination: destination ?? tripDestination,
-      startsAt: startsAt ?? eventStartAndEndDate?.from,
-      endsAt: endsAt ?? eventStartAndEndDate?.to,
-    });
-
-    const formErrors = destinationAndDateFormSchemaParsed.error?.formErrors.fieldErrors;
-
-    setDestinationAndDateFormErrors(formErrors);
-    return formErrors;
-  }
-
   function checkDestinationInputValid(e: ChangeEvent<HTMLInputElement>) {
     setDestination(e.target.value);
     validateDestinationAndDateFormSchema({ destination: e.target.value });
-  }
-
-  function checkStartsAndEndsAtInputsValid(startsAt: string, endsAt: string) {
-    validateDestinationAndDateFormSchema({ startsAt, endsAt });
   }
 
   function handleGoToInviteGuestsStep() {
@@ -165,7 +165,11 @@ export function DestinationAndDateStep({
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h2 className="text-lg font-semibold">Selecione a data</h2>
-                  <button type="button" onClick={() => closeDatePicker(false)}>
+                  <button
+                    type="button"
+                    onClick={() => closeDatePicker(false)}
+                    aria-label="Close"
+                  >
                     <X className="size-5 text-zinc-400" />
                   </button>
                 </div>

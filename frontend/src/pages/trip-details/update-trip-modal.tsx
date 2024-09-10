@@ -94,6 +94,27 @@ export function UpdateTripModal({
     setIsUpdateTripModalClosable({ maskClosable: true, closable: true, keyboard: true });
   }
 
+  function validateUpdateTripFormSchema({
+    destination,
+    startsAt,
+    endsAt,
+  }: ValidateUpdateTripFormSchema) {
+    const updateTripFormSchemaParsed = updateTripFormSchema.safeParse({
+      destination: destination ?? tripUpdated.destination,
+      startsAt: startsAt ?? tripUpdated.starts_at,
+      endsAt: endsAt ?? tripUpdated.ends_at,
+    });
+
+    const formErrors = updateTripFormSchemaParsed.error?.formErrors.fieldErrors;
+
+    setUpdateTripFormErrors(formErrors);
+    return formErrors;
+  }
+
+  function checkStartsAndEndsAtInputsValid(startsAt: string, endsAt: string) {
+    validateUpdateTripFormSchema({ startsAt, endsAt });
+  }
+
   function handleSelectEventStartAndEndDate() {
     if (
       eventStartAndEndDate
@@ -139,30 +160,9 @@ export function UpdateTripModal({
     }
   }
 
-  function validateUpdateTripFormSchema({
-    destination,
-    startsAt,
-    endsAt,
-  }: ValidateUpdateTripFormSchema) {
-    const updateTripFormSchemaParsed = updateTripFormSchema.safeParse({
-      destination: destination ?? tripUpdated.destination,
-      startsAt: startsAt ?? tripUpdated.starts_at,
-      endsAt: endsAt ?? tripUpdated.ends_at,
-    });
-
-    const formErrors = updateTripFormSchemaParsed.error?.formErrors.fieldErrors;
-
-    setUpdateTripFormErrors(formErrors);
-    return formErrors;
-  }
-
   function checkDestinationInputValid(e: ChangeEvent<HTMLInputElement>) {
     setTripUpdated({ ...tripUpdated, destination: e.target.value });
     validateUpdateTripFormSchema({ destination: e.target.value });
-  }
-
-  function checkStartsAndEndsAtInputsValid(startsAt: string, endsAt: string) {
-    validateUpdateTripFormSchema({ startsAt, endsAt });
   }
 
   function resetUpdateTripForm() {
@@ -228,7 +228,11 @@ export function UpdateTripModal({
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <h2 className="text-lg font-semibold">Selecione a data</h2>
-                      <button type="button" onClick={() => closeDatePicker(false)}>
+                      <button
+                        type="button"
+                        onClick={() => closeDatePicker(false)}
+                        aria-label="Close"
+                      >
                         <X className="size-5 text-zinc-400" />
                       </button>
                     </div>

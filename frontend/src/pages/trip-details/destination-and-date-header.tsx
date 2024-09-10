@@ -18,9 +18,9 @@ interface TripParams {
   tripId: string
 }
 
-const destinationAndDateHeaderLoader: LoaderFunction<TripParams> = async function (
+const destinationAndDateHeaderLoader: LoaderFunction<TripParams> = async (
   { params },
-) {
+) => {
   const response = await api.get(`/trips/${params.tripId}`);
   return response.data;
 };

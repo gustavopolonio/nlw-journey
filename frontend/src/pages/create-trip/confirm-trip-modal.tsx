@@ -15,7 +15,7 @@ interface ConfirmTripModalProps {
   tripOwnerEmail: string
   setOwnerName: (name: string) => void
   setOwnerEmail: (email: string) => void
-  destination?: string
+  destination: string
   startAndEndDate?: DateRange
   isCreatingTrip: boolean
 }
@@ -42,7 +42,7 @@ export function ConfirmTripModal({
   setOwnerName,
   setOwnerEmail,
   destination,
-  startAndEndDate,
+  startAndEndDate = undefined,
   isCreatingTrip,
 }: ConfirmTripModalProps) {
   const [confirmTripCreationFormErrors, setConfirmTripCreationFormErrors] = useState<
@@ -60,17 +60,6 @@ export function ConfirmTripModal({
       }))
     : '-';
 
-  function handleCreateTrip(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setHasAttemptedSubmitForm(true);
-
-    const formErrors = !!validateConfirmTripCreationFormSchema({});
-
-    if (!formErrors) {
-      createTrip();
-    }
-  }
-
   function validateConfirmTripCreationFormSchema({
     ownerName,
     ownerEmail,
@@ -84,6 +73,17 @@ export function ConfirmTripModal({
 
     setConfirmTripCreationFormErrors(formErrors);
     return formErrors;
+  }
+
+  function handleCreateTrip(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setHasAttemptedSubmitForm(true);
+
+    const formErrors = !!validateConfirmTripCreationFormSchema({});
+
+    if (!formErrors) {
+      createTrip();
+    }
   }
 
   function checkOwnerNameInputValid(e: ChangeEvent<HTMLInputElement>) {
@@ -115,7 +115,7 @@ export function ConfirmTripModal({
           <p className="text-sm text-zinc-400">
             Para concluir a criação da viagem para
             {' '}
-            <span className="text-zinc-100 font-semibold">{destination || '-'}</span>
+            <span className="text-zinc-100 font-semibold">{destination}</span>
             {' '}
             nas datas de
             {' '}
