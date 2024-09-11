@@ -18,12 +18,6 @@ interface Trip {
   ends_at: string
 }
 
-interface UpdateTripModalProps {
-  isOpen: boolean
-  closeModal: () => void
-  trip: Trip
-}
-
 const updateTripFormSchema = z.object({
   destination: z.string().trim().min(3, { message: 'Mínimo 3 caracteres' }),
   startsAt: z.coerce.date({
@@ -41,11 +35,19 @@ const updateTripFormSchema = z.object({
 });
 
 type UpdateTripFormSchema = z.infer<typeof updateTripFormSchema>
+
 type UpdateTripFormErrors = {
   [key in keyof UpdateTripFormSchema]?: string[]
 }
+
 type ValidateUpdateTripFormSchema = {
   [key in keyof UpdateTripFormSchema]?: string
+}
+
+interface UpdateTripModalProps {
+  isOpen: boolean
+  closeModal: () => void
+  trip: Trip
 }
 
 export function UpdateTripModal({

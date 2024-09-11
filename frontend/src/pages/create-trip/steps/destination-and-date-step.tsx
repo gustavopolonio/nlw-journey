@@ -12,16 +12,6 @@ import { z } from 'zod';
 import { Button } from '../../../components/button';
 import 'react-day-picker/style.css';
 
-interface DestinationAndDateStepProps {
-  isGuestInputVisible: boolean
-  hideGuestInput: () => void
-  showGuestInput: () => void
-  tripDestination: string
-  setDestination: (destination: string) => void
-  eventStartAndEndDate: DateRange | undefined
-  setEventStartAndEndDate: (dates: DateRange | undefined) => void
-}
-
 const destinationAndDateFormSchema = z.object({
   destination: z.string().trim().min(3, { message: 'Destino deve ter no mínimo 3 caracteres' }),
   startsAt: z.coerce.date({
@@ -39,11 +29,23 @@ const destinationAndDateFormSchema = z.object({
 });
 
 type DestinationAndDateFormSchema = z.infer<typeof destinationAndDateFormSchema>
+
 type DestinationAndDateFormErrors = {
   [key in keyof DestinationAndDateFormSchema]?: string[]
 }
+
 type ValidateDestinationAndDateFormSchema = {
   [key in keyof DestinationAndDateFormSchema]?: string
+}
+
+interface DestinationAndDateStepProps {
+  isGuestInputVisible: boolean
+  hideGuestInput: () => void
+  showGuestInput: () => void
+  tripDestination: string
+  setDestination: (destination: string) => void
+  eventStartAndEndDate: DateRange | undefined
+  setEventStartAndEndDate: (dates: DateRange | undefined) => void
 }
 
 export function DestinationAndDateStep({

@@ -6,23 +6,25 @@ import { Modal } from '../../components/modal';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 
-interface CreateLinkModalProps {
-  isOpen: boolean
-  closeModal: () => void
-  getLinks: () => Promise<void>
-}
-
 const createLinkFormSchema = z.object({
   title: z.string().trim().min(3, { message: 'Mínimo 3 caracteres' }),
   url: z.string().url({ message: 'URL inválida' }),
 });
 
 type CreateLinkFormSchema = z.infer<typeof createLinkFormSchema>
+
 type CreateLinkFormErrors = {
   [key in keyof CreateLinkFormSchema]?: string[]
 }
+
 type ValidateCreateLinkFormSchema = {
   [key in keyof CreateLinkFormSchema]?: string
+}
+
+interface CreateLinkModalProps {
+  isOpen: boolean
+  closeModal: () => void
+  getLinks: () => Promise<void>
 }
 
 export function CreateLinkModal({

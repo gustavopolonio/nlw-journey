@@ -26,9 +26,11 @@ const confirmTripCreationFormSchema = z.object({
 });
 
 type ConfirmTripCreationFormSchema = z.infer<typeof confirmTripCreationFormSchema>
+
 type ConfirmTripCreationFormErrors = {
   [key in keyof ConfirmTripCreationFormSchema]?: string[]
 }
+
 type ValidateConfirmTripCreationFormSchema = {
   [key in keyof ConfirmTripCreationFormSchema]?: string
 }

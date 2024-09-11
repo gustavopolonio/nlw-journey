@@ -4,6 +4,26 @@ import { z } from 'zod';
 import { Button } from '../../components/button';
 import { Modal } from '../../components/modal';
 
+function generateInviteGuestFormSchema(emailsToInvite: string[]) {
+  return z.object({
+    email: z.string().email({
+      message: 'Email inválido',
+    }).refine((email) => !emailsToInvite.includes(email), {
+      message: 'Email já adicionado',
+    }),
+  });
+}
+
+type InviteGuestFormSchema = z.infer<ReturnType<typeof generateInviteGuestFormSchema>>
+
+type InviteGuestFormErrors = {
+  [key in keyof InviteGuestFormSchema]?: string[]
+}
+
+type ValidateInviteGuestFormSchema = {
+  [key in keyof InviteGuestFormSchema]?: string
+}
+
 interface InviteGuestsModalProps {
   isOpen: boolean
   closeGuestModal: () => void
@@ -19,27 +39,13 @@ export function InviteGuestsModal({
   addEmailToInvite,
   removeEmailFromInvites,
 } : InviteGuestsModalProps) {
-  const inviteGuestFormSchema = z.object({
-    email: z.string().email({
-      message: 'Email inválido',
-    }).refine((email) => !emailsToInvite.includes(email), {
-      message: 'Email já adicionado',
-    }),
-  });
-
-  type InviteGuestFormSchema = z.infer<typeof inviteGuestFormSchema>
-  type InviteGuestFormErrors = {
-    [key in keyof InviteGuestFormSchema]?: string[]
-  }
-  type ValidateInviteGuestFormSchema = {
-    [key in keyof InviteGuestFormSchema]?: string
-  }
-
   const [guestEmail, setGuestEmail] = useState('');
   const [inviteGuestFormErrors, setInviteGuestFormErrors] = useState<
     InviteGuestFormErrors | undefined
   >(undefined);
   const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
+
+  const inviteGuestFormSchema = generateInviteGuestFormSchema(emailsToInvite);
 
   function validateInviteGuestFormSchema({
     email,

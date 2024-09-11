@@ -17,6 +17,7 @@ module.exports = {
     }
   },
   parser: '@typescript-eslint/parser',
+  ignorePatterns: ['dist', '.eslintrc.cjs'],
   rules: {
     'import/prefer-default-export': 'off',
     'linebreak-style': ['error', process.platform === 'win32' ? 'windows' : 'unix'],

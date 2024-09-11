@@ -7,6 +7,26 @@ import { Modal } from '../../components/modal';
 import { Button } from '../../components/button';
 import { api } from '../../lib/axios';
 
+function generateInviteGuestFormSchema(emailsToInvite: string[]) {
+  return z.object({
+    email: z.string().email({
+      message: 'Email inválido',
+    }).refine((email) => !emailsToInvite.includes(email), {
+      message: 'Email já adicionado',
+    }),
+  });
+}
+
+type InviteGuestFormSchema = z.infer<ReturnType<typeof generateInviteGuestFormSchema>>
+
+type InviteGuestFormErrors = {
+  [key in keyof InviteGuestFormSchema]?: string[]
+}
+
+type ValidateInviteGuestFormSchema = {
+  [key in keyof InviteGuestFormSchema]?: string
+}
+
 interface ManageGuestsModalProps {
   isOpen: boolean
   closeModal: () => void
@@ -18,26 +38,9 @@ export function ManageGuestsModal({
   closeModal,
   getParticipants,
 }: ManageGuestsModalProps) {
-  const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
-
-  const inviteGuestFormSchema = z.object({
-    email: z.string().email({
-      message: 'Email inválido',
-    }).refine((email) => !emailsToInvite.includes(email), {
-      message: 'Email já adicionado',
-    }),
-  });
-
-  type InviteGuestFormSchema = z.infer<typeof inviteGuestFormSchema>
-  type InviteGuestFormErrors = {
-    [key in keyof InviteGuestFormSchema]?: string[]
-  }
-  type ValidateInviteGuestFormSchema = {
-    [key in keyof InviteGuestFormSchema]?: string
-  }
-
   const { tripId } = useParams();
   const [guestEmail, setGuestEmail] = useState('');
+  const [emailsToInvite, setEmailsToInvite] = useState<string[]>([]);
   const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
   const [inviteGuestsError, setInviteGuestsError] = useState({
     show: false,
@@ -52,6 +55,8 @@ export function ManageGuestsModal({
     closable: true,
     keyboard: true,
   });
+
+  const inviteGuestFormSchema = generateInviteGuestFormSchema(emailsToInvite);
 
   function removeEmailFromInvites(emailToRemove: string) {
     setEmailsToInvite(emailsToInvite.filter((email) => email !== emailToRemove));

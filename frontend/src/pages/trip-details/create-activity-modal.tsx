@@ -18,23 +18,8 @@ interface Trip {
   ends_at: string
 }
 
-interface CreateActivityModalProps {
-  isOpen: boolean
-  closeModal: () => void
-}
-
-export function CreateActivityModal({
-  isOpen,
-  closeModal,
-}: CreateActivityModalProps) {
-  const { trip } = useLoaderData() as { trip: Trip };
-  const { tripId } = useParams();
-  const dispatch = useAppDispatch();
-  const [activityTitle, setActivityTitle] = useState('');
-  const [activityOccursAt, setActivityOccursAt] = useState('');
-  const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
-
-  const createActivityFormSchema = z.object({
+function generateCreateActivityFormSchema(trip: Trip) {
+  return z.object({
     title: z.string().trim().min(3, { message: 'Mínimo 3 caracteres' }),
     occursAt: z.coerce.date({
       errorMap: ({ code }, { defaultError }) => ({
@@ -54,18 +39,38 @@ export function CreateActivityModal({
       message: 'A data escolhida é depois do término da viagem',
     }),
   });
+}
 
-  type CreateActivityFormSchema = z.infer<typeof createActivityFormSchema>
-  type CreateActivityFormErrors = {
-    [key in keyof CreateActivityFormSchema]?: string[]
-  }
-  type ValidateCreateActivityFormSchema = {
-    [key in keyof CreateActivityFormSchema]?: string
-  }
+type CreateActivityFormSchema = z.infer<ReturnType<typeof generateCreateActivityFormSchema>>
 
+type CreateActivityFormErrors = {
+  [key in keyof CreateActivityFormSchema]?: string[]
+}
+
+type ValidateCreateActivityFormSchema = {
+  [key in keyof CreateActivityFormSchema]?: string
+}
+
+interface CreateActivityModalProps {
+  isOpen: boolean
+  closeModal: () => void
+}
+
+export function CreateActivityModal({
+  isOpen,
+  closeModal,
+}: CreateActivityModalProps) {
+  const { trip } = useLoaderData() as { trip: Trip };
+  const { tripId } = useParams();
+  const dispatch = useAppDispatch();
+  const [activityTitle, setActivityTitle] = useState('');
+  const [activityOccursAt, setActivityOccursAt] = useState('');
+  const [hasAttemptedSubmitForm, setHasAttemptedSubmitForm] = useState(false);
   const [createActivityFormErrors, setCreateActivityFormErrors] = useState<
     CreateActivityFormErrors | undefined
   >(undefined);
+
+  const createActivityFormSchema = generateCreateActivityFormSchema(trip);
 
   function validateCreateActivityFormSchema(
     {
