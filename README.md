@@ -8,7 +8,6 @@
 * [About this Project](#book-about-this-project)
 * [How to Use](#construction_worker-how-to-use)
 * [Technologies](#computer-technologies)
-* [License](#closed_book-license)
 
 # :book: About this Project
 
@@ -16,7 +15,7 @@ Trip planner is an app to organize your trip together with your guests.
 
 You put the trip destination, the start and end date, invite the guests and you can add important activities and links. So that everyone has a travel schedule with easy access.
 
-Live link: [https://nlw-journey-front-end-taupe.vercel.app/](https://nlw-journey-front-end-taupe.vercel.app/)
+Live link: [https://nlw-journey-front-end-taupe.vercel.app/](https://nlw-journey-front-end-taupe.vercel.app)
 
 This project is an improvement of a [Rocketseat](https://app.rocketseat.com.br/) idea.
 
