@@ -45,8 +45,10 @@ app.register(deleteParticipant)
 app.register(deleteLink)
 app.register(deleteActivity)
 
+const port = env.PORT || 4000;
+
 app.listen({ 
-  // port: env.PORT,
+  port,
   host: '0.0.0.0'
 }).then(() => {
   console.log('App running!')
