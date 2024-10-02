@@ -51,6 +51,6 @@ app.listen({
   port,
   host: '0.0.0.0'
 }).then(() => {
-  console.log('App running!')
+  console.log(`Example app listening on port ${port}`)
 })
 
